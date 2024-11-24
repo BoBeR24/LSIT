@@ -1,6 +1,6 @@
 package lsit.Models;
 
-import java.util.Map;  //I simplified the code  to only include variables
+import java.util.Map;  //I simplified the code  to only include variables similar to pet.java
 
 public class EngineeringTeams {
     public Map<String, String> mechanicalTasks;
