@@ -1,13 +1,13 @@
 package lsit.Models;
 
-import java.util.Map;
+import java.util.Map;  //I simplified the code  to only include variables
 
 public class EngineeringTeams {
     public Map<String, String> mechanicalTasks;
     public Map<String, String> electricalTasks;
     public Map<String, String> softwareTasks;
 
-   
+
     public EngineeringTeams() {}
 
 
