@@ -23,8 +23,8 @@ import java.util.UUID;
 public class S3ClientRepository implements IClientRepository {
     final String BUCKET="starship-mechanic-shop";
     final String PREFIX="clientstore/clients/";
-    final String ACCESS_KEY="GOOG1EM4BODFHSWVPEFXA3FWS3TEG6CIL5RZ7WHQ3QN66MMUF5VKVAPAXYZCH";
-    final String SECRET_KEY="v/8XBIN27gtNjdRcK5ffIUcioMVyJur5UG7hPy24";
+    final String ACCESS_KEY=""; // can be received from google cloud bucket settings
+    final String SECRET_KEY=""; // from the same place as ACCESS_KEY
     final String ENDPOINT_URL="https://storage.googleapis.com";
 
     S3Client s3client;
