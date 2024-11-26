@@ -1,10 +1,11 @@
 package lsit.Models;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class DiagnosticAssessment {
-    public String assessmentId;
-    public String requestId;
+    public UUID id;
+    public UUID requestId;
 
     public ServiceTeam assignedTeam;
 
