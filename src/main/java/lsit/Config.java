@@ -1,11 +1,13 @@
 package lsit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,8 +22,8 @@ public class Config{
                 .csrf(c -> c.disable())
                 .oauth2Login(withDefaults())
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/client").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/clients").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/home").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/pets").hasRole("PETS")
                         .anyRequest().permitAll()
                 )
         ;
