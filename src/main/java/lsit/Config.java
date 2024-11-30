@@ -22,8 +22,16 @@ public class Config{
                 .csrf(c -> c.disable())
                 .oauth2Login(withDefaults())
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers(HttpMethod.GET, "/home").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/pets").hasRole("PETS")
+                        .requestMatchers("/authentication").authenticated()
+                        .requestMatchers("/clients").hasRole("CLIENT")
+                        .requestMatchers("/electricians").hasRole("ELECTRICIAN")
+                        .requestMatchers("/mechanics").hasRole("MECHANIC")
+                        .requestMatchers("/software-specialists").hasRole("SOFTWARE-SPECIALIST")
+                        .requestMatchers("/repair-team-reports").hasAnyRole("ELECTRICIAN", "MECHANIC", "SOFTWARE-SPECIALIST")
+                        .requestMatchers("/diagnostician").hasRole("DIAGNOSTICIAN")
+                        .requestMatchers("/diagnostic-assessments").hasRole("DIAGNOSTICIAN")
+                        .requestMatchers("/assemblers").hasRole("ASSEMBLER")
+                        .requestMatchers("/final-reports").hasRole("ASSEMBLER")
                         .anyRequest().permitAll()
                 )
         ;

@@ -1,8 +1,8 @@
-// use ServiceRequest class instead. I'm leaving it here just in case
+package lsit.SupportingClasses;
 
-package lsit.Models;
-
-public class Ship {
+/** Not an actual model, used to store possible specifications for ships
+ * */
+public abstract class Ship {
     public String id;
 
     public ShipModel model;

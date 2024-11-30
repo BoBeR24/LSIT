@@ -1,8 +1,7 @@
 package lsit.Controllers;
 
 import lsit.Models.DiagnosticAssessment;
-import lsit.Models.DiagnosticAssessment.DamageLevel;
-import lsit.Models.DiagnosticAssessment.ServiceTeam;
+
 import lsit.Repositories.DiagnosticAssessmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/diagnostic-assessments")
@@ -30,6 +28,7 @@ public class DiagnosticAssessmentController {
             if (assessment.id == null) {
                 assessment.id = UUID.randomUUID();
             }
+
             diagnosticAssessmentRepository.add(assessment);
             return new ResponseEntity<>(assessment, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -66,7 +65,7 @@ public class DiagnosticAssessmentController {
             if (existingAssessment == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            assessment.id = id;
+
             diagnosticAssessmentRepository.update(assessment);
             return new ResponseEntity<>(assessment, HttpStatus.OK);
         } catch (Exception e) {

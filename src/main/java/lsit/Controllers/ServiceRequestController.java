@@ -63,7 +63,7 @@ public class ServiceRequestController {
             if (existingRequest == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            request.id = id; // Ensure the ID matches the path variable
+
             serviceRequestRepository.update(request);
             return new ResponseEntity<>(request, HttpStatus.OK);
         } catch (Exception e) {

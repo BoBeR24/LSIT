@@ -1,7 +1,6 @@
 package lsit.Models;
 
-
-public class Client {
+public class Assembler {
     public String userName;
     public int id;
     public String password;

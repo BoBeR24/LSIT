@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is custom implementation of the service which returns authenticated user by request.
+ * When spring asks to load a user this implementation is loaded.<br>
+ * ----------<br>
+ * Difference between default implementation and this one is that it additionally adds special authorities based on
+ * groups which user is a part of
+ * */
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 

@@ -1,7 +1,7 @@
 package lsit.Models;
 
 
-public class Client {
+public class Electrician {
     public String userName;
     public int id;
     public String password;

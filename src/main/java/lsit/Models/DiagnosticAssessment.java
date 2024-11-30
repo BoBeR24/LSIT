@@ -1,11 +1,15 @@
 package lsit.Models;
 
+import lsit.SupportingClasses.ServiceTeam;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class DiagnosticAssessment {
     public UUID id;
     public UUID requestId;
+    public List<Integer> authorsId;
 
     public ServiceTeam assignedTeam;
 
@@ -19,7 +23,5 @@ public class DiagnosticAssessment {
         LOW, SEVERE, CRITICAL
     }
 
-    public enum ServiceTeam {
-        MECHANICAL, ELECTRICAL, SOFTWARE
-    }
+
 }

@@ -1,7 +1,7 @@
 package lsit.Controllers;
 
 import lsit.Models.Client;
-import lsit.Repositories.InMemoryIClientRepository;
+import lsit.Repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +14,17 @@ import java.util.UUID;
 @RequestMapping("/clients")
 public class ClientController {
 
-    private final InMemoryIClientRepository inMemoryClientRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    public ClientController(InMemoryIClientRepository inMemoryClientRepository) {
-        this.inMemoryClientRepository = inMemoryClientRepository;
+    public ClientController(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     @PostMapping
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
         try {
-            inMemoryClientRepository.add(client);
+            clientRepository.add(client);
             return new ResponseEntity<>(client, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -32,8 +32,8 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClient(@PathVariable UUID id) {
-        Client client = inMemoryClientRepository.get(id);
+    public ResponseEntity<Client> getClient(@PathVariable int id) {
+        Client client = clientRepository.get(id);
         if (client != null) {
             return new ResponseEntity<>(client, HttpStatus.OK);
         } else {
@@ -44,7 +44,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         try {
-            List<Client> clients = inMemoryClientRepository.list();
+            List<Client> clients = clientRepository.list();
             return new ResponseEntity<>(clients, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,14 +52,14 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable UUID id, @RequestBody Client client) {
+    public ResponseEntity<Client> updateClient(@PathVariable int id, @RequestBody Client client) {
         try {
-            Client existingClient = inMemoryClientRepository.get(id);
+            Client existingClient = clientRepository.get(id);
             if (existingClient == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            client.id = id; // Ensure the ID matches the path variable
-            inMemoryClientRepository.update(client);
+
+            clientRepository.update(client);
             return new ResponseEntity<>(client, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,13 +67,13 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable int id) {
         try {
-            Client existingClient = inMemoryClientRepository.get(id);
+            Client existingClient = clientRepository.get(id);
             if (existingClient == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            inMemoryClientRepository.remove(id);
+            clientRepository.remove(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
