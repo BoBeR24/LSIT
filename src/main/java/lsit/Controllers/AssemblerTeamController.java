@@ -20,17 +20,15 @@ public class AssemblerTeamController {
         this.inMemoryAssemblerRepository = inMemoryAssemblerRepository;
     }
 
-    // Leaving this API method commented out if someone wants to test adding new instances of entities.
-    // Keep in mind that instance should be automatically created when user gets authorised
-//    @PostMapping
-//    public ResponseEntity<Assembler> createAssembler(@RequestBody Assembler assembler) {
-//        try {
-//            inMemoryAssemblerRepository.add(assembler);
-//            return new ResponseEntity<>(assembler, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<Assembler> createAssembler(@RequestBody Assembler assembler) {
+        try {
+            inMemoryAssemblerRepository.add(assembler);
+            return new ResponseEntity<>(assembler, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Assembler> getAssembler(@PathVariable Integer id) {

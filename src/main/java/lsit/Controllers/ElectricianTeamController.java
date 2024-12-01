@@ -5,6 +5,7 @@ import lsit.Repositories.ElectricianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,20 +21,25 @@ public class ElectricianTeamController {
         this.electricianRepository = electricianRepository;
     }
 
-    // Leaving this API method commented out if someone wants to test adding new instances of entities.
-    // Keep in mind that instance should be automatically created when user gets authorised
-//    @PostMapping
-//    public ResponseEntity<Electrician> createElectrician(@RequestBody Electrician electrician) {
-//        try {
-//            electricianRepository.add(electrician);
-//            return new ResponseEntity<>(electrician, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<Electrician> createElectrician(@RequestBody Electrician electrician) {
+        try {
+            electricianRepository.add(electrician);
+            return new ResponseEntity<>(electrician, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Electrician> getElectrician(@PathVariable Integer id) {
+    public ResponseEntity<Electrician> getElectrician(@PathVariable Integer id, OAuth2AuthenticationToken authToken) {
+        int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+        // If user tries to get access to a different user's data - refuse
+        if (authUserId != id) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Electrician electrician = electricianRepository.get(id);
         if (electrician != null) {
             return new ResponseEntity<>(electrician, HttpStatus.OK);
@@ -53,8 +59,15 @@ public class ElectricianTeamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Electrician> updateElectrician(@PathVariable Integer id, @RequestBody Electrician electrician) {
+    public ResponseEntity<Electrician> updateElectrician(@PathVariable Integer id, @RequestBody Electrician electrician, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Electrician existingElectrician = electricianRepository.get(id);
             if (existingElectrician == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,8 +81,15 @@ public class ElectricianTeamController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteElectrician(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteElectrician(@PathVariable Integer id, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Electrician existingElectrician = electricianRepository.get(id);
             if (existingElectrician == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

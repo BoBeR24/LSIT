@@ -35,6 +35,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .map(group -> new SimpleGrantedAuthority("ROLE_" + extractRole(group).toUpperCase()))
                 .collect(Collectors.toList());
 
+        // grants any authorised user admin permissions - FOR DEBUGGING ONLY
+//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
         return new DefaultOAuth2User(authorities, user.getAttributes(), "name");
     }
 

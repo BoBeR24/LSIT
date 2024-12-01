@@ -5,6 +5,7 @@ import lsit.Repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,14 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClient(@PathVariable int id) {
+    public ResponseEntity<Client> getClient(@PathVariable int id, OAuth2AuthenticationToken authToken) {
+        int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+        // If user tries to get access to a different user's data - refuse
+        if (authUserId != id) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Client client = clientRepository.get(id);
         if (client != null) {
             return new ResponseEntity<>(client, HttpStatus.OK);
@@ -52,8 +60,15 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable int id, @RequestBody Client client) {
+    public ResponseEntity<Client> updateClient(@PathVariable int id, @RequestBody Client client, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Client existingClient = clientRepository.get(id);
             if (existingClient == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,8 +82,15 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable int id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable int id, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Client existingClient = clientRepository.get(id);
             if (existingClient == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

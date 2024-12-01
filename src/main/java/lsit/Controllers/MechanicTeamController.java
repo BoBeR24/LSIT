@@ -5,6 +5,7 @@ import lsit.Repositories.MechanicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,20 +21,25 @@ public class MechanicTeamController {
         this.mechanicRepository = mechanicRepository;
     }
 
-    // Leaving this API method commented out if someone wants to test adding new instances of entities.
-    // Keep in mind that instance should be automatically created when user gets authorised
-//    @PostMapping
-//    public ResponseEntity<Mechanic> createMechanic(@RequestBody Mechanic mechanic) {
-//        try {
-//            mechanicRepository.add(mechanic);
-//            return new ResponseEntity<>(mechanic, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping
+    public ResponseEntity<Mechanic> createMechanic(@RequestBody Mechanic mechanic) {
+        try {
+            mechanicRepository.add(mechanic);
+            return new ResponseEntity<>(mechanic, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mechanic> getMechanic(@PathVariable Integer id) {
+    public ResponseEntity<Mechanic> getMechanic(@PathVariable Integer id, OAuth2AuthenticationToken authToken) {
+        int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+        // If user tries to get access to a different user's data - refuse
+        if (authUserId != id) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Mechanic mechanic = mechanicRepository.get(id);
         if (mechanic != null) {
             return new ResponseEntity<>(mechanic, HttpStatus.OK);
@@ -53,8 +59,15 @@ public class MechanicTeamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Mechanic> updateMechanic(@PathVariable Integer id, @RequestBody Mechanic mechanic) {
+    public ResponseEntity<Mechanic> updateMechanic(@PathVariable Integer id, @RequestBody Mechanic mechanic, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Mechanic existingMechanic = mechanicRepository.get(id);
             if (existingMechanic == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,8 +81,15 @@ public class MechanicTeamController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMechanic(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteMechanic(@PathVariable Integer id, OAuth2AuthenticationToken authToken) {
         try {
+            int authUserId = Integer.parseInt((String) authToken.getPrincipal().getAttributes().get("sub"));
+
+            // If user tries to get access to a different user's data - refuse
+            if (authUserId != id) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
             Mechanic existingMechanic = mechanicRepository.get(id);
             if (existingMechanic == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
