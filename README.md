@@ -37,13 +37,14 @@ In GitLab:
 8. Select Save application.
 
 # About the project 
-## Lab 1
-Lab 1
+
 First things first we had to choose the topic of our project. Choice fell onto a mechanic shop with a twist - its for star ships.
 Next step – define business process and entities. In our mechanic shop the procedure is simple:
   1.	The [Client](src/main/java/lsit/Models/Client.java) provides his/her star ship to the mechanic shop with a [description of the ship and the problem itself] (ServiceRequest class).
   2.	The [Diagnostic Team](src/main/java/lsit/Models/Diagnostician.java) accesses the [situation](src/main/java/lsit/Models/DiagnosticAssesment.java) at hand and there are 2 ways of handling that problem:
-    a.	The fault is a quick fix, so it is done right after the diagnostics and the ship is sent off to the final step
-    b.	The fault needs to be taken care of by actual engineers, known as the [Electrician](src/main/java/lsit/Models/Electrician.java), [Mechanic](src/main/java/lsit/Models/Mechanic.java) and [Software Specialist]((src/main/java/lsit/Models/SoftwareSpecialist.java)) classes.
+    -	The fault is a quick fix, so it is done right after the diagnostics and the ship is sent off to the final step
+    -	The fault needs to be taken care of by actual engineers, known as the [Electrician](src/main/java/lsit/Models/Electrician.java), [Mechanic](src/main/java/lsit/Models/Mechanic.java) and [Software Specialist]((src/main/java/lsit/Models/SoftwareSpecialist.java)) classes.
   3.	After the problem is taken care of each engineering team that participated in the fix has to write a [Repair Team Report]((src/main/java/lsit/Models/RepairTeamReport.java))
-  4.	Finally, after the issues are fixed (or not) and the team reports are written comes in the [Assembler]((src/main/java/lsit/Models/Assembler.java)). His job is to create the [(src/main/java/lsit/Models/FinalReport.java)](class), which would be send off the the client with all the works done on the star ship, remaining issues and, of course, the costs to be paid, *we are doing business here after all*
+  4.	Finally, after the issues are fixed (or not) and the team reports are written comes in the [Assembler](src/main/java/lsit/Models/Assembler.java). His job is to create the [Final Report](src/main/java/lsit/Models/FinalReport.java), which would be send off the the client with all the works done on the star ship, remaining issues and, of course, the costs to be paid, *we are doing business here after all*
+
+There is one more role, which is not a part of the business process but is a crucial member of the system - [Admin](src/main/java/lsit/Models/Admin.java). This entity is a necessary part of the process as it ensures we have a role that has the rights to all commands in case there is an issue present.
