@@ -4,6 +4,8 @@
    receive any roles, thus, will not have any permissions in the network)
 3. For checking possible api calls go to https://localhost:8080/swagger-ui/index.html
 
+NOTE: For admin role go to [CustomOAuth2ClientService](src/main/java/lsit/Service\CustomOAuth2ClientService) and uncomment line at the end of the program(there is a comment about it)
+
 # *IMPORTANT
 For testing authorization you first need to set up application.yml file in [src/main/resources](src/main/resources) folder.
 ```yaml
