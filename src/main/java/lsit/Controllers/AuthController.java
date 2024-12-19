@@ -18,6 +18,7 @@ public class AuthController {
     private final MechanicRepository mechanicRepository;
     private final SoftwareSpecialistRepository softwareSpecialistRepository;
     private final AssemblerRepository assemblerRepository;
+    private final AdminRepository adminRepository;
 
     @Autowired
     public AuthController(ClientRepository clientRepository,
@@ -25,7 +26,8 @@ public class AuthController {
                           ElectricianRepository electricianRepository,
                           MechanicRepository mechanicRepository,
                           SoftwareSpecialistRepository softwareSpecialistRepository,
-                          AssemblerRepository assemblerRepository) {
+                          AssemblerRepository assemblerRepository,
+                          AdminRepository adminRepository) {
 
         this.clientRepository = clientRepository;
         this.diagnosticianRepository = diagnosticianRepository;
@@ -33,6 +35,7 @@ public class AuthController {
         this.mechanicRepository = mechanicRepository;
         this.softwareSpecialistRepository = softwareSpecialistRepository;
         this.assemblerRepository = assemblerRepository;
+        this.adminRepository = adminRepository;
     }
 
     @GetMapping("/authentication")
@@ -45,7 +48,17 @@ public class AuthController {
             userAuthorities.add(elem.toString());
         }
 
-        if (userAuthorities.contains("ROLE_CLIENT")) {
+        if (userAuthorities.contains("ROLE_ADMIN")) {
+            Admin admin = new Admin();
+
+            admin.userName = (String) userAttributes.get("nickname");
+            admin.id = Integer.parseInt((String) userAttributes.get("sub"));
+            admin.password = null; // set password to null, as we use token based authentication
+
+            this.adminRepository.add(admin);
+            return "Admin registered with following attributes. <br> ID: " + admin.id + "<br>userName: " + admin.userName;
+        }
+        else if (userAuthorities.contains("ROLE_CLIENT")) {
             Client client = new Client();
 
             client.userName = (String) userAttributes.get("nickname");
