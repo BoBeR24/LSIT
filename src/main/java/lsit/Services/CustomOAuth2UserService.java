@@ -1,4 +1,4 @@
-package lsit.Service;
+package lsit.Services;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -36,7 +36,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .collect(Collectors.toList());
 
         // grants any authorised user admin permissions - FOR DEBUGGING ONLY
-//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         return new DefaultOAuth2User(authorities, user.getAttributes(), "name");
     }

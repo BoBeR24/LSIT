@@ -1,12 +1,27 @@
 # How To Use
+## Launching from source code
 1. Launch server from Main class
 2. Authorize via GitLab token by going to https://localhost:8080/authentication (if you are not authorized you would not
    receive any roles, thus, will not have any permissions in the network)
 3. For checking possible api calls go to https://localhost:8080/swagger-ui/index.html
+## Launching with docker
+1. Go to the working [directory](.). Build docker image by running following command 
+    ```bash
+    docker build -t springio/gs-spring-boot-docker .
+    ```
+2. Launch docker container by running
+    ```bash
+    docker run -p 8080:8080 springio/gs-spring-boot-docker:latest
+    ```
+3. Same steps as from source code step 2
+
 
 # *IMPORTANT
 For testing authorization you first need to set up application.yml file in [src/main/resources](src/main/resources) folder.
+(If you are using IntelliJ mark created resources directory as resources root)
 ```yaml
+server:
+  address: 0.0.0.0
 spring:
   security:
     oauth2:
@@ -112,12 +127,6 @@ Role distribution happens in CustomOAuth2UserService(), it gets activated when u
 There are no extensive security measures in our network, but all role restrictions are implemented either using config file,
 in which by creating a custom security filter chain we specify which roles have which permissions or just by if statements
 in controllers in which id of the current user is checked and then decided on whether to give access to the call or not.
-
-# Scalability
-We tried to keep structure of the network rather simple, so in that regard it should be not hard to scale the model.
-However, in the current version of the code(it may get updated) we don't use any design patterns, interfaces or inheritance,
-so introducing new interdependencies between models or creating new fields may be quite a tedious task.
-Our network doesn't scale automatically at all, so I would rate scalability of the current version as LOW-MEDIUM
 
 ## Here's ChatGPT analysis of the scalability of our project, I advise to read through it, as it may contain rather useful information:
 

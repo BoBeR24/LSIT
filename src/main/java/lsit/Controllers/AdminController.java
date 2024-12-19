@@ -39,43 +39,43 @@ public class AdminController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<Admin>> getAllAdmins() {
-        try {
-            List<Admin> admins = adminRepository.list();
-            return new ResponseEntity<>(admins, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping
+//    public ResponseEntity<List<Admin>> getAllAdmins() {
+//        try {
+//            List<Admin> admins = adminRepository.list();
+//            return new ResponseEntity<>(admins, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Admin> updateAdmin(@PathVariable int id, @RequestBody Admin admin, OAuth2AuthenticationToken authToken) {
+//        try {
+//            Admin existingAdmin = adminRepository.get(id);
+//            if (existingAdmin == null) {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//
+//            adminRepository.update(admin);
+//            return new ResponseEntity<>(admin, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Admin> updateAdmin(@PathVariable int id, @RequestBody Admin admin, OAuth2AuthenticationToken authToken) {
-        try {
-            Admin existingAdmin = adminRepository.get(id);
-            if (existingAdmin == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-
-            adminRepository.update(admin);
-            return new ResponseEntity<>(admin, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable int id, OAuth2AuthenticationToken authToken) {
-        try {
-            Admin existingAdmin = adminRepository.get(id);
-            if (existingAdmin == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            adminRepository.remove(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteAdmin(@PathVariable int id, OAuth2AuthenticationToken authToken) {
+//        try {
+//            Admin existingAdmin = adminRepository.get(id);
+//            if (existingAdmin == null) {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//            adminRepository.remove(id);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 }

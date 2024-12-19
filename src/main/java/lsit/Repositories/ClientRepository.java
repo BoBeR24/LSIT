@@ -1,35 +1,122 @@
 package lsit.Repositories;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.net.URI;
+import java.util.*;
+
+import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lsit.Models.Client;
-import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
+import static lsit.SupportingClasses.CloudCredentials.*;
 
 @Repository
 public class ClientRepository {
-    static HashMap<Integer, Client> clients = new HashMap<Integer, Client>();
+    String LOCAL_PREFIX = PREFIX + "clients/";
+    S3Client s3client;
+    AwsCredentials awsCredentials;
 
-    public void add(Client client){
-        clients.put(client.id, client);
+    public ClientRepository() {
+        awsCredentials = AwsBasicCredentials.create(ACCESS_KEY, SECRET_KEY);
+        s3client = S3Client.builder()
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .region(Region.of("auto"))
+                .forcePathStyle(true)
+                .build();
     }
 
-    public Client get(Integer id){
-        return clients.get(id);
+    public void add(Client client) {
+        try {
+            ObjectMapper om = new ObjectMapper();
+            String clientJson = om.writeValueAsString(client);
+
+            s3client.putObject(PutObjectRequest.builder()
+                            .bucket(BUCKET)
+                            .key(LOCAL_PREFIX + client.id)
+                            .build(),
+                    RequestBody.fromString(clientJson)
+            );
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void remove(Integer id){
-        clients.remove(id);
+    public Client get(Integer id) {
+        try {
+            var objectBytes = s3client.getObject(GetObjectRequest.builder()
+                    .bucket(BUCKET)
+                    .key(LOCAL_PREFIX + id)
+                    .build()
+            ).readAllBytes();
+
+            ObjectMapper om = new ObjectMapper();
+            return om.readValue(objectBytes, Client.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public void update(Client client){
-        Client x = clients.get(client.id);
-        x.userName = client.userName;
-        x.password = client.password;
+    public void remove(Integer id) {
+        try {
+            s3client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(BUCKET)
+                    .key(LOCAL_PREFIX + id)
+                    .build()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public List<Client> list(){
-        return new ArrayList<>(clients.values());
+    public void update(Client client) {
+        try {
+            Client existing = get(client.id);
+            if (existing == null) return;
+
+            ObjectMapper om = new ObjectMapper();
+            String clientJson = om.writeValueAsString(client);
+
+            s3client.putObject(PutObjectRequest.builder()
+                            .bucket(BUCKET)
+                            .key(LOCAL_PREFIX + client.id)
+                            .build(),
+                    RequestBody.fromString(clientJson)
+            );
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Client> list() {
+        List<Client> clientList = new ArrayList<>();
+        try {
+            ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
+                    .bucket(BUCKET)
+                    .prefix(LOCAL_PREFIX)
+                    .build();
+
+            ListObjectsV2Response listResponse = s3client.listObjectsV2(listRequest);
+
+            for (S3Object object : listResponse.contents()) {
+                String key = object.key();
+                Integer id = Integer.parseInt(key.substring(LOCAL_PREFIX.length()));
+                Client client = get(id);
+                if (client != null) {
+                    clientList.add(client);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return clientList;
     }
 }
