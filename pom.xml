@@ -34,16 +34,6 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.2</version>
     </parent>
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
-
     <build>
         <plugins>
             <plugin>
@@ -92,45 +82,5 @@
             <version>2.26.24</version>
         </dependency>
     </dependencies>
-
-
-
-<!--    <build>-->
-<!--        <finalName>${project.artifactId}-${project.version}</finalName>-->
-<!--        <sourceDirectory>src</sourceDirectory>-->
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src</directory>-->
-<!--                <excludes>-->
-<!--                    <exclude>**/*.java</exclude>-->
-<!--                </excludes>-->
-<!--            </resource>-->
-<!--        </resources>-->
-<!--        <plugins>-->
-<!--&lt;!&ndash;            <plugin>&ndash;&gt;-->
-<!--&lt;!&ndash;                <groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
-<!--&lt;!&ndash;                <artifactId>maven-compiler-plugin</artifactId>&ndash;&gt;-->
-<!--&lt;!&ndash;                <version>${maven-compiler-plugin.version}</version>&ndash;&gt;-->
-<!--&lt;!&ndash;                <configuration>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <source>${maven.compiler.source}</source>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <target>${maven.compiler.target}</target>&ndash;&gt;-->
-<!--&lt;!&ndash;                </configuration>&ndash;&gt;-->
-<!--&lt;!&ndash;            </plugin>&ndash;&gt;-->
-<!--            <plugin>-->
-<!--                &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-jar-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <mainClass>lsit.Main</mainClass>-->
-<!--                        </manifest>-->
-<!--                    </archive>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-
-<!--    </build>-->
 
 </project>
